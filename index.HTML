@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ポケポケ・デッキレシピ図鑑</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>ポケポケ・デッキレシピ図鑑</h1>
+      <input
+        id="search"
+        type="search"
+        placeholder="デッキ名・属性で検索"
+        aria-label="検索"
+      />
+    </header>
+
+    <main id="deck-grid">
+      <!-- ====== デッキカード１つめ ====== -->
+      <article class="card">
+        <a href="#solgaleo" class="card-link">
+          <img
+            src="https://placehold.co/600x350?text=Solgaleo"
+            alt="ソルガレオex デッキ"
+          />
+          <h2>ソルガレオex デッキ</h2>
+          <p class="tags">鋼 · 初心者</p>
+        </a>
+      </article>
+
+      <!-- ====== デッキカード２つめ ====== -->
+      <article class="card">
+        <a href="#charizard" class="card-link">
+          <img
+            src="https://placehold.co/600x350?text=Charizard"
+            alt="リザードン デッキ"
+          />
+          <h2>リザードン デッキ</h2>
+          <p class="tags">炎</p>
+        </a>
+      </article>
+
+      <!-- ここに同じ <article> をコピペして増やすだけ -->
+    </main>
+
+    <!-- ====== モーダル的な簡易詳細 ====== -->
+    <dialog id="detail">
+      <button class="close" onclick="detail.close()">×</button>
+      <h2 id="detail-title"></h2>
+      <img id="detail-img" src="" alt="" />
+      <pre id="deck-code" class="code"></pre>
+      <button
+        onclick="navigator.clipboard.writeText(deckCode).then(()=>alert('コピーしました'))"
+      >
+        コードをコピー
+      </button>
+    </dialog>
+
+    <script>
+      /* ---------- 簡易検索 ---------- */
+      const q = document.getElementById('search');
+      q.addEventListener('input', () => {
+        const term = q.value.toLowerCase();
+        document.querySelectorAll('.card').forEach((c) => {
+          c.style.display = c.innerText.toLowerCase().includes(term)
+            ? ''
+            : 'none';
+        });
+      });
+
+      /* ---------- モーダル表示 ---------- */
+      const detail = document.getElementById('detail');
+      let deckCode = '';
+      document.querySelectorAll('.card-link').forEach((a) =>
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const parent = a.parentElement;
+          deckCode = a.hash === '#solgaleo' ? 'AAAA-BBBB-CCCC' : 'DDDD-EEEE-FFFF'; // 仮データ
+          detail.querySelector('#detail-title').innerText =
+            parent.querySelector('h2').innerText;
+          detail.querySelector('#detail-img').src =
+            parent.querySelector('img').src;
+          detail.querySelector('#deck-code').innerText = deckCode;
+          detail.showModal();
+        })
+      );
+    </script>
+  </body>
+</html>
